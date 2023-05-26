@@ -44,7 +44,7 @@ private:
 
 	bool IsGrabbing = false;
 
-
+	bool GetGrabbableInReach(FHitResult &OutHitResult) const;
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
 	void SetGrabbedLocation();
 };
