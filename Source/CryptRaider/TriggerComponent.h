@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
+#include "_Project/Mover.h"
 #include "TriggerComponent.generated.h"
 
 /**
@@ -24,4 +25,15 @@ protected:
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+private:
+	UPROPERTY(EditAnywhere)
+	FName TagToTrigger;
+
+	UPROPERTY(EditAnywhere)
+	TArray<AActor*> MoverActors;
+	
+
+	AActor* GetTriggerActorOverlapping() const;
+	void TriggerMovers();
 };
