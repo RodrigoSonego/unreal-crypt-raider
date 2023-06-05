@@ -23,6 +23,16 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 	if (TriggerActor != nullptr) 
 	{
+		UPrimitiveComponent* PrimComponent = Cast<UPrimitiveComponent>(TriggerActor->GetRootComponent());
+		if (PrimComponent == nullptr) { return; }
+		PrimComponent->SetSimulatePhysics(false);
+
+		FAttachmentTransformRules Rules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
+		TriggerActor->AttachToActor(GetOwner(), Rules);
+
+		TriggerActor->SetActorRelativeLocation(FVector(0, 0, 0));
+		TriggerActor->SetActorRelativeRotation(FQuat::Identity);
+
 		TriggerMovers();
 	}
 
