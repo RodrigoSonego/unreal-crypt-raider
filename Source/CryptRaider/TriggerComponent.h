@@ -36,4 +36,5 @@ private:
 
 	AActor* GetTriggerActorOverlapping() const;
 	void TriggerMovers();
+	void AttachTriggerActor(AActor* TriggerActor);
 };

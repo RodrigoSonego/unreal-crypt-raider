@@ -12,7 +12,9 @@ void UTriggerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Display, TEXT("Trigger started"));
+	/*FScriptDelegate Del = FScriptDelegate();
+	Del.BindUFunction(this, )
+	Super::OnComponentBeginOverlap.Add();*/
 }
 
 void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -21,17 +23,14 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 	AActor* TriggerActor = GetTriggerActorOverlapping();
 
-	if (TriggerActor != nullptr) 
+	if (TriggerActor != nullptr)
 	{
 		UPrimitiveComponent* PrimComponent = Cast<UPrimitiveComponent>(TriggerActor->GetRootComponent());
 		if (PrimComponent == nullptr) { return; }
+
 		PrimComponent->SetSimulatePhysics(false);
 
-		FAttachmentTransformRules Rules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
-		TriggerActor->AttachToActor(GetOwner(), Rules);
-
-		TriggerActor->SetActorRelativeLocation(FVector(0, 0, 0));
-		TriggerActor->SetActorRelativeRotation(FQuat::Identity);
+		AttachTriggerActor(TriggerActor);
 
 		TriggerMovers();
 	}
@@ -44,9 +43,13 @@ AActor* UTriggerComponent::GetTriggerActorOverlapping() const
 	GetOverlappingActors(Actors);
 	for (AActor* actor : Actors)
 	{
-		if (actor->ActorHasTag(TagToTrigger) == false) { continue; }
+		bool HasTriggerTag = actor->ActorHasTag(TagToTrigger);
+		bool IsGrabbed = actor->ActorHasTag("Grabbed");
 
-		return actor;
+		if (HasTriggerTag && IsGrabbed == false)
+		{
+			return actor;
+		}
 	}
 
 	return nullptr;
@@ -62,4 +65,12 @@ void UTriggerComponent::TriggerMovers()
 
 		Mover->SetShouldMove(true);
 	}
+}
+
+void UTriggerComponent::AttachTriggerActor(AActor* TriggerActor)
+{
+	FAttachmentTransformRules Rules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
+	TriggerActor->AttachToActor(GetOwner(), Rules);
+	TriggerActor->SetActorRelativeLocation(FVector(0, 0, 0));
+	TriggerActor->SetActorRelativeRotation(FQuat::Identity);
 }
