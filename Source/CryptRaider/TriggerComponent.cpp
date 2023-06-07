@@ -71,6 +71,6 @@ void UTriggerComponent::AttachTriggerActor(AActor* TriggerActor)
 {
 	FAttachmentTransformRules Rules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
 	TriggerActor->AttachToActor(GetOwner(), Rules);
-	TriggerActor->SetActorRelativeLocation(FVector(0, 0, 0));
+	TriggerActor->SetActorRelativeLocation(RelativeSnapPosition);
 	TriggerActor->SetActorRelativeRotation(FQuat::Identity);
 }

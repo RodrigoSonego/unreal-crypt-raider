@@ -32,6 +32,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TArray<AActor*> MoverActors;
+
+	UPROPERTY(EditAnywhere)
+	FVector RelativeSnapPosition;
 	
 
 	AActor* GetTriggerActorOverlapping() const;
