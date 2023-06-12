@@ -11,16 +11,13 @@ UTriggerComponent::UTriggerComponent()
 void UTriggerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	/*FScriptDelegate Del = FScriptDelegate();
-	Del.BindUFunction(this, )
-	Super::OnComponentBeginOverlap.Add();*/
 }
 
 void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	//TODO: Refactor this shenanigan into an event
 	AActor* TriggerActor = GetTriggerActorOverlapping();
 
 	if (TriggerActor != nullptr)
@@ -32,9 +29,12 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 		AttachTriggerActor(TriggerActor);
 
-		TriggerMovers();
+		TriggerMovers(true);
 	}
-
+	else
+	{
+		TriggerMovers(false);
+	}
 }
 
 AActor* UTriggerComponent::GetTriggerActorOverlapping() const
@@ -55,7 +55,7 @@ AActor* UTriggerComponent::GetTriggerActorOverlapping() const
 	return nullptr;
 }
 
-void UTriggerComponent::TriggerMovers()
+void UTriggerComponent::TriggerMovers(bool WillMove)
 {
 	for(AActor* Actor : MoverActors)
 	{
@@ -63,7 +63,7 @@ void UTriggerComponent::TriggerMovers()
 
 		if (Mover == nullptr) { continue; }
 
-		Mover->SetShouldMove(true);
+		Mover->SetShouldMoveToTarget(WillMove);
 	}
 }
 
